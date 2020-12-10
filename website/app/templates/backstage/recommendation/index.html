@@ -1,0 +1,93 @@
+{% extends "backstage/base.html" %}
+
+{% block contents %}
+<a href="{{ url_for('backstage.build_recommendation')}}">新建推荐</a>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>文章id</th>
+        <th>文章标题</th>
+        <th>文章状态</th>
+        <th>封面图片</th>
+        <th>链接</th>
+        <th>禁用/启用</th>
+        <th>删除</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for recommendation in recommendations %}
+    <tr>
+        <td>
+            <a href="{{ url_for('backstage.edit_recommendation', recommendation_id=recommendation.id) }}">{{ recommendation.id }}</a>
+        </td>
+        {% if recommendation.article_id %}
+        <td> {{ recommendation.article_id }}</td>
+        <td>
+            <a href="{{ url_for('article.article_show', article_id=recommendation.article_id) }}" target=_blank>
+                {{ recommendation.article.title }}
+            </a>
+        </td>
+        <td>
+            {% if recommendation.article.reviewed==True and recommendation.article.public==True and recommendation.article.forbid==False %}
+            <span class="text-success">正常</span>
+            {% else %}
+            <span class="text-danger">异常</span>
+            {% endif %}
+        </td>
+        {% else %}
+        <td></td>
+        <td></td>
+        <td></td>
+        {% endif %}
+
+        <td>
+            {% if recommendation.coverpic %}
+            <a href="{{ recommendation.coverpic }}" target=_blank>{{ recommendation.coverpic }}</a>
+            {% endif %}
+        </td>
+        <td>
+            {% if recommendation.link %}
+            <a href="{{ recommendation.link }}" target=_blank>{{ recommendation.link|truncate(64) }}</a>
+            {% endif %}
+        </td>
+        <td>
+            {% if recommendation.forbid%}
+            <span class="text-danger">禁用</span>
+            {% else %}
+            <span class="text-success">启用</span>
+            {% endif %}
+        </td>
+
+        <td>
+            <a class="text-decoration-none text-danger" data-toggle="modal" data-target="#DELETE{{ recommendation.id }}" style="margin-left: 10px">删除</a>
+        </td>
+        <div class="modal fade" id="DELETE{{ recommendation.id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- 确认框头部 -->
+                    <div class="modal-header">
+                        <p class="modal-title">确认要删除推荐么？</p>
+                        <button class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 确认框主体 -->
+                    <div class="modal-body text-center">
+                        删除后，推荐不可恢复.
+                    </div>
+
+                    <!-- 确认框底部 -->
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <a class="btn btn-danger float-left" href="{{ url_for('backstage.delete_recommendation', recommendation_id=recommendation.id) }}">删除</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

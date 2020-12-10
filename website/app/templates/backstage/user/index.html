@@ -1,0 +1,79 @@
+{% extends "backstage/index.html" %}
+
+{% block contents %}
+
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>用户名</th>
+        <th>邮箱</th>
+        <th>邮箱验证</th>
+        <th>级别</th>
+        <th>文章数</th>
+        <th>评论数</th>
+        <th>禁用</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+            {% if user.confirmed %}
+            <span class="text-success">已验证</span>
+            {% else %}
+            <span class="text-danger">未验证</span>
+            {% endif%}
+        </td>
+        <td>{{ user.level }}</td>
+        <td>{{ user.articles|length }}</td>
+        <td>{{ user.comments|length }}</td>
+        <td>
+            {% if user.forbid %}
+            <a class="text-danger " href="{{ url_for('backstage.forbid_user', user_id=user.id ) }}">
+                禁用
+            </a>
+            {% else %}
+            <a class="text-success" href="{{ url_for('backstage.forbid_user', user_id=user.id ) }}">
+                开放
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!--分页-->
+<div class="" style="">
+    <div class="container">
+        <ul class="pagination justify-content-center">
+            {% if pagination.has_prev %}
+            <li class="page-item "><a class="page-link" href="{{ url_for('backstage.user_manage', page=pagination.prev_num) }}">上一页</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">上一页</a></li>
+            {% endif %}
+
+            {% for page_num in pagination.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+            {% if page_num %}
+            {% if pagination.page == page_num %}
+            <li class="page-item active"><a class="page-link" href="{{ url_for('backstage.user_manage', page=page_num) }}">{{ page_num }}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('backstage.user_manage', page=page_num) }}">{{ page_num }}</a></li>
+            {% endif %}
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="">......</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if pagination.has_next %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('backstage.user_manage', page=pagination.next_num) }}">下一页</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">下一页</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

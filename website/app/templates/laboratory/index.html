@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block contents %}
+<div class="container">
+    <!-- 顶部区域 -->
+    <div class="row" style="min-height:600px">
+        {% for experiment in experiments %}
+        <div class="col-lg-3 col-md-4 col-sm-6" style="margin-bottom:30px">
+            <div class="card" >
+                <a href="{{ experiment.link }}" target="_blank">
+                    <img class="card-img-top d-none d-md-block" id="hover_img" src="{{ experiment.coverpic }}" alt="Card image" style="width:100%; height:200px; boder:">
+                </a>
+                <div class="card-body">
+                    <a href="{{ experiment.link }}" class="text-dark" target="_blank">
+                        <h5 id="truncate1" class="card-title" title="{{ experiment.title }}">{{ experiment.title }}</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

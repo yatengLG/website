@@ -1,0 +1,11 @@
+flask
+flask-bootstrap
+flask-wtf
+flask-sqlalchemy
+flask-moment
+flask-mail
+flask-login
+flask-script
+flask-migrate
+flask_apscheduler
+qiniu

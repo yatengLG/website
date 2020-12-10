@@ -1,0 +1,76 @@
+{% extends "backstage/base.html" %}
+
+{% block contents %}
+<a href="{{ url_for('backstage.build_experiment')}}">新建实验</a>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>标题</th>
+        <th>封面图片链接</th>
+        <th>链接</th>
+        <th>禁用/启用</th>
+        <th>删除</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for experiment in experiments %}
+    <tr>
+        <td>
+            {{ experiment.id }}
+        </td>
+        <td>
+            <a href="{{ url_for('backstage.edit_experiment', experiment_id=experiment.id) }}">
+                {{ experiment.title }}
+            </a>
+        </td>
+        <td>
+            <a href="{{ experiment.coverpic }}" target="_blank">
+                {{ experiment.coverpic }}
+            </a>
+        </td>
+        <td>
+            <a href="{{ experiment.link }}" target="_blank">
+                {{ experiment.link }}
+            </a>
+        </td>
+        <td>
+            {% if experiment.forbid %}
+            <span class="text-danger">禁用</span>
+            {% else %}
+            <span class="text-success">启用</span>
+            {% endif %}
+        </td>
+
+        <td>
+            <a class="text-decoration-none text-danger" data-toggle="modal" data-target="#DELETE{{ experiment.id }}" style="margin-left: 10px">删除</a>
+        </td>
+        <div class="modal fade" id="DELETE{{ experiment.id }}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- 确认框头部 -->
+                    <div class="modal-header">
+                        <p class="modal-title">确认要删除实验么？</p>
+                        <button class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- 确认框主体 -->
+                    <div class="modal-body text-center">
+                        删除后，轮播不可恢复.
+                    </div>
+
+                    <!-- 确认框底部 -->
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <a class="btn btn-danger float-left" href="{{ url_for('backstage.delete_experiment', experiment_id=experiment.id) }}">删除</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block contents %}
+
+    <!--container-->
+    <div class="container" style="background:white; padding-top: 15px; padding-bottom: 15px; min-height: 500px">
+        <div class="row" style="margin-right: 10px">
+
+            <!--<a href="#demo" class="btn btn-primary" data-toggle="collapse">个人信息</a>-->
+            <!--<div id="demo" class="collapse">-->
+                <!--<div>-->
+                    <!--<p>姓名： {{ current_user.username }}</p>-->
+                    <!--<p>邮箱： {{ current_user.email }}</p>-->
+                    <!--<p>-->
+                    <!--{% if current_user.forbid %}-->
+                    <!--账号被禁用，请联系管理员了解详情.-->
+                    <!--{% endif %}-->
+                    <!--</p>-->
+                    <!--<p>账号等级： {{ current_user.level }}</p>-->
+                    <!--<p>文章数量： {{ current_user.articles|length}}</p>-->
+                    <!--<p>评论数量： {{ current_user.comments|length}}</p>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="col-12">
+                <ul class="nav nav-tabs" role="tablist" style="">
+                    {% if current_user.id == user.id %}
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" data-toggle="tab" href="#information" style=""><strong>个人信息</strong></a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" data-toggle="tab" href="#information" style=""><strong>作者信息</strong></a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link text-dark active" data-toggle="tab" href="#articles" style=""><strong>文章</strong></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" data-toggle="tab" href="#comments"><strong>评论</strong></a>
+                    </li>
+                </ul>
+                <!--<h2 style="margin-top: 25px"> 共有文章{{ current_user.articles|length}}篇</h2>-->
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    {% if current_user.id == user.id %}
+                    <div id="articles" class=" tab-pane active"><br>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>标题</th>
+                                    <th>文章来源</th>
+                                    <th>文章分类</th>
+                                    <th>上传时间</th>
+<!--                                    <th>最后更新时间</th>-->
+                                    <th>浏览量</th>
+                                    <th>评论数</th>
+                                    <th>发布形式</th>
+                                    <th>文章状态</th>
+                                    <th>审核</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for article in articles %}
+                                    <tr>
+                                        <td>
+                                            <a class="text-decoration-none" href="{{ url_for('article.article_show', article_id=article.id) }}" title="{{ article.title }}">
+                                                {{ article.title|striptags|truncate(12) }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {% if article.original=='原创' %}
+                                                <span class="text-success">{{ article.original }}</span>
+                                            {% elif article.original == '转载' %}
+                                                <span class="text-primary">{{ article.original }}</span>
+                                            {% else %}
+                                                <span class="text-info">{{ article.original }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="">{{ article.classes }}</span>
+                                        </td>
+                                        <td>{{ moment(article.timestamp).format('L') }}</td>
+
+<!--                                        <td>{% if article.updatetimestamp %}-->
+<!--                                                {{ moment(article.updatetimestamp).format('LLL') }}-->
+<!--                                            {% endif %}-->
+<!--                                        </td>-->
+                                        <td>{{ article.clicks }}</td>
+                                        <td>{{ article.comments|length }}</td>
+                                        <td>
+                                            {% if article.public %}
+                                                <span class="text-success">
+                                                    公开
+                                                </span>
+                                            {% else %}
+                                                <span class="text-info" title="只有您可以查看本文">
+                                                    私有
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if article.forbid %}
+                                                <span class="text-danger" title="文章被网站禁用，详情请联系管理员">
+                                                    禁用
+                                                </span>
+                                            {% else %}
+                                                <span class="text-success" title="文章未被网站禁用">
+                                                    启用
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if article.reviewed %}
+                                                <span class="text-success">
+                                                    已审核
+                                                </span>
+                                            {% else %}
+                                                <span class="text-danger" title="未经过审核，只能自己查看">
+                                                    待审核
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div id="articles" class=" tab-pane active"><br>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>文章来源</th>
+                                <th>文章分类</th>
+                                <th>上传时间</th>
+                                <!--                                    <th>最后更新时间</th>-->
+                                <th>浏览量</th>
+                                <th>评论数</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for article in articles %}
+                            <tr>
+                                <td>
+                                    <a class="text-decoration-none" href="{{ url_for('article.article_show', article_id=article.id) }}" title="{{ article.title }}">
+                                        {{ article.title|striptags|truncate(12) }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if article.original=='原创' %}
+                                    <span class="text-success">{{ article.original }}</span>
+                                    {% elif article.original == '转载' %}
+                                    <span class="text-primary">{{ article.original }}</span>
+                                    {% else %}
+                                    <span class="text-info">{{ article.original }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="">{{ article.classes }}</span>
+                                </td>
+                                <td>{{ moment(article.timestamp).format('L') }}</td>
+
+                                <!--                                        <td>{% if article.updatetimestamp %}-->
+                                <!--                                                {{ moment(article.updatetimestamp).format('LLL') }}-->
+                                <!--                                            {% endif %}-->
+                                <!--                                        </td>-->
+                                <td>{{ article.clicks }}</td>
+                                <td>{{ article.comments|length }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                    {% if current_user.id == user.id %}
+                    <div id="comments" class="tab-pane fade"><br>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>评论内容</th>
+                                    <th>相关文章</th>
+                                    <th>文章状态</th>
+                                    <th>评论时间</th>
+                                    <th>评论状态</th>
+                                    <th>审核</th>
+                                    <th>删除</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for comment in comments %}
+                                    <tr>
+                                            <td title="{{ comment.body }}">{{ comment.body|striptags|truncate(12) }}</td>
+                                        <td>
+                                            <a href="{{ url_for('article.article_show', article_id=comment.article.id) }}" title="{{ comment.article.title }}">
+                                                {{ comment.article.title|striptags|truncate(12) }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {% if comment.article.forbid %}
+                                                <span class="text-danger" title="所评论文章已被网站禁用">
+                                                    禁用
+                                                </span>
+                                            {% else %}
+                                                <span class="text-success">
+                                                    启用
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ moment(comment.timestamp).format('LLL') }}</td>
+                                        <td>
+                                            {% if comment.forbid %}
+                                                <span class="text-danger" title="评论被网站禁用，详情请联系管理员">
+                                                    禁用
+                                                </span>
+                                            {% else %}
+                                                <span class="text-success">
+                                                    启用
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if comment.reviewed %}
+                                                <span class="text-success">
+                                                    已审核
+                                                </span>
+                                            {% else %}
+                                                <span class="text-danger" title="未经过审核，只能自己查看">
+                                                    待审核
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a class="text-decoration-none text-danger" data-toggle="modal" data-target="#DELETE{{ comment.id }}" style="margin-left: 10px">删除</a>
+                                        </td>
+                                        <div class="modal fade" id="DELETE{{ comment.id }}">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                    <!-- 确认框头部 -->
+                                                    <div class="modal-header">
+                                                        <p class="modal-title">确认要删除评论么？</p>
+                                                        <button class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+
+                                                    <!-- 确认框主体 -->
+                                                    <div class="modal-body text-center">
+                                                        删除后，评论不可恢复.
+                                                    </div>
+
+                                                    <!-- 确认框底部 -->
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                                        <a class="btn btn-danger float-left" href="{{ url_for('article.comment_delete', comment_id=comment.id) }}">删除</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                    {% else %}
+                    <div id="comments" class="tab-pane fade"><br>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>评论内容</th>
+                                <th>相关文章</th>
+                                <th>评论时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for comment in comments %}
+                            <tr>
+                                <td title="{{ comment.body }}">{{ comment.body|striptags|truncate(12) }}</td>
+                                <td>
+                                    <a href="{{ url_for('article.article_show', article_id=comment.article.id) }}" title="{{ comment.article.title }}">
+                                        {{ comment.article.title|striptags|truncate(12) }}
+                                    </a>
+                                </td>
+                                <td>{{ moment(comment.timestamp).format('LLL') }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                    {% endif %}
+                    {% if current_user.id == user.id %}
+                    <div id="information" class="tab-pane fade">
+                        <hr>
+                        <p>姓名：{{ current_user.username }}</p>
+                        <p>邮箱：{{ current_user.email }}</p>
+
+                        {% if current_user.forbid %}
+                            <p class="text-danger">账号被禁用，请联系管理员了解详情.</p>
+                        {% endif %}
+
+                        {% if current_user.level>1 %}
+                            <p>权限等级：{{ current_user.level }}</p>
+                        {% endif %}
+
+                        <p>文章数量：{{ articles|length}}</p>
+                        <p>评论数量：{{ comments|length}}</p>
+                        <hr>
+                        {% if not current_user.confirmed %}
+                        <p><a class="text-success" href="{{ url_for('user.resend_confirmation') }}">验证邮箱<span class="text-danger">(未验证)</span></a></p>
+                        {% else %}
+                        <p>邮箱已验证</p>
+                        {% endif %}
+                        <a class="text-danger" href="{{ url_for('user.remove') }}" title='注销账号将会删除账号信息，并清空所有发布的文章以及评论'><strong>注销账号</strong></a>
+                    </div>
+                    {% else %}
+                    <div id="information" class="tab-pane fade">
+                        <hr>
+                        <p>用户名：{{ user.username }}</p>
+                        <p>文章数量：{{ articles|length}}</p>
+                        <p>评论数量：{{ comments|length}}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

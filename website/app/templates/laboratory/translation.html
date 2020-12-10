@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block contents %}
+<div class="container">
+    <div style="padding-top:100px; padding-bottom:100px">
+        <div>
+            <div class="col-6">
+                <select name="from_lang" id="from_lang">
+                    <option value="auto" selected>自动检测</option>
+                    <option value="en">英语</option>
+                    <option value="zh">中文</option>
+                    <option value="wyw">文言文</option>
+                </select>
+                <i class="fa fa-angle-double-right" style="font-size:24px"></i>
+                <select name="to_lang" id="to_lang">
+                    <option value="en">英语</option>
+                    <option value="zh" selected>中文</option>
+                    <option value="wyw">文言文</option>
+                </select>
+                <button id="translate" class="btn btn-light float-right">翻译</button>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <textarea name="from_content" id="from_content" style="width:100%; min-height:300px">
+
+                </textarea>
+                </div>
+                <div class="col-lg-6">
+                    <div id="to_content" style="width:100%; min-height:300px;background-color:white">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

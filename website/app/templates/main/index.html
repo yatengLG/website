@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block contents %}
+    <div class="container">
+        <!-- 顶部区域 -->
+        <div class="row" style="margin-bottom:15px">
+
+            {% if carousels %}
+            <!-- 左侧轮播 -->
+            <div class="col-lg-8 col-xl-8 d-none d-lg-block" style="padding-left: 0; padding-right: 0; width: 100%; height: 350px">
+                <!-- 轮播 -->
+                <div id="demo" class="carousel slide" data-ride="carousel" style="width:100% ; height:100%">
+
+                    <!-- 指示符 -->
+                    <ul class="carousel-indicators">
+                        {% for i in range(carousels|length) %}
+                        <li data-target="#demo" data-slide-to="{{ i }}"></li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- 轮播图片 -->
+                    <div class="carousel-inner" style="width:100% ; height:100%">
+                        <div class="carousel-item active" style="width:100% ; height:100%">
+                            <a href="{{ url_for('article.article_show', article_id=carousels[0].article.id) }}">
+                                <img src="http://q7u6l89tx.bkt.clouddn.com/{{ carousels[0].article.coverpic }}" style="width:100% ; height:100%">
+                                <div class="carousel-caption" style="background-color: black">
+                                    <h4>{{ carousels[0].article.title }}</h4>
+                                </div>
+                            </a>
+                        </div>
+                        {% for carousel in carousels[1:] %}
+                        <div class="carousel-item" style="width:100% ; height:100%">
+                            <a href="{{ url_for('article.article_show', article_id=carousel.article.id) }}">
+                                <img src="http://q7u6l89tx.bkt.clouddn.com/{{ carousel.article.coverpic }}" style="width:100% ; height:100%">
+                                <div class="carousel-caption" style="background-color: black">
+                                    <h4>{{ carousel.article.title }}</h4>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- 左右切换按钮 -->
+                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#demo" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+
+                </div>
+            </div>
+            {% elif articles %}
+            <!-- 左侧轮播 -->
+            <div class="col-lg-8 col-xl-8 d-none d-lg-block" style="padding-left: 0; padding-right: 0; width: 100%; height: 350px">
+                <!-- 轮播 -->
+                <div id="demo" class="carousel slide" data-ride="carousel" style="width:100% ; height:100%">
+
+                    <!-- 指示符 -->
+                    <ul class="carousel-indicators">
+                        {% for i in range(articles|length) %}
+                        <li data-target="#demo" data-slide-to="{{ i }}"></li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- 轮播图片 -->
+                    <div class="carousel-inner" style="width:100% ; height:100%">
+                        <div class="carousel-item active" style="width:100%; height:100%">
+                            <a href="{{ url_for('article.article_show', article_id=articles[0].id) }}">
+                                <img src="http://q7u6l89tx.bkt.clouddn.com/{{ articles[0].coverpic }}" style="width:100%; height:100%">
+                                <div class="carousel-caption" style="background-color: black">
+                                    <h4>{{ articles[0].title }}</h4>
+                                </div>
+                            </a>
+                        </div>
+                        {% for article in articles[1:] %}
+                        <div class="carousel-item" style="width:100%; height:100%">
+                            <a href="{{ url_for('article.article_show', article_id=article.id) }}">
+                                <img src="http://q7u6l89tx.bkt.clouddn.com/{{ article.coverpic }}" style="width:100%; height:100%">
+                                <div class="carousel-caption" style="background-color: black">
+                                    <h4>{{ article.title }}</h4>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- 左右切换按钮 -->
+                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#demo" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 右侧图片展示-->
+            <div class="col-lg-4 col-xl-4 d-none d-lg-block" style="padding-right: 0;">
+                {% if recommendations[0] %}
+                {% set recommendation1 = recommendations[0] %}
+                <div>
+                    {% if recommendation1.article %}
+                    <a href="{{ url_for('article.article_show', article_id=recommendation1.article.id) }}" target=_blank>
+                        <img id="hover_img"
+                             class="align-self-center mr-3"
+                             style="width: 385px; height: 167.5px"
+                             src="http://q7u6l89tx.bkt.clouddn.com/{{recommendation1.article.coverpic}}">
+                    </a>
+                    {% else %}
+                    <a href="{{ recommendation1.link }}" target=_blank>
+                        <img id="hover_img"
+                             class="align-self-center mr-3"
+                             style="width: 385px; height: 167.5px"
+                             src="{{recommendation1.coverpic}}">
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if recommendations[1] %}
+                {% set recommendation2 = recommendations[1] %}
+                <div style="margin-top: 15px">
+                    {% if recommendation2.article %}
+                    <a href="{{ url_for('article.article_show', article_id=recommendation2.article.id) }}" target=_blank>
+                        <img id="hover_img"
+                             class="align-self-center mr-3"
+                             style="width: 385px; height: 167.5px"
+                             src="http://q7u6l89tx.bkt.clouddn.com/{{recommendation2.article.coverpic}}">
+                    </a>
+                    {% else %}
+                    <a href="{{ recommendation2.link }}" target=_blank>
+                        <img id="hover_img"
+                             class="align-self-center mr-3"
+                             style="width: 385px; height: 167.5px"
+                             src="{{recommendation2.coverpic}}">
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <!-- 内容区域 -->
+        <div class="row">
+            <!-- 文章区域 -->
+            <div class="col-xl-8 col-12" style="padding-left: 0; padding-right: 0">
+                <ul class="list-group">
+                    {% for article in articles %}
+                    <li class="list-group-item list-group-item-action border-0" style="padding-left: 0px; ">
+                        <div class="media">
+                            <div class="d-none d-lg-block">
+                                <a id="hover_img" href="{{ url_for('article.article_show', article_id=article.id) }}">
+                                    <img class="align-self-center mr-3" style="width: 240px; height: 150px" src="http://q7u6l89tx.bkt.clouddn.com/{{article.coverpic}}">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h5>
+                                    <a class="text-dark" style="padding: 0" href="{{ url_for('article.article_show', article_id=article.id) }}">
+                                        {{ article.title }}
+                                    </a>
+                                </h5>
+                                {% if article.original == '原创' %}
+                                    <span class="badge badge-success">{{ article.original }}</span>
+                                {% elif article.original == '转载' %}
+                                    <span class="badge badge-primary">{{ article.original }}</span>
+                                {% else %}
+                                    <span class="badge badge-info">{{ article.original }}</span>
+                                {% endif %}
+                                <span class="text-secondary" style="margin-left: 10px">{{ article.classes }}</span>
+                                <span><a class="text-secondary" style="padding: 0; margin-left: 5px" href="{{ url_for('user.home', user_id=article.user.id ) }}">{{ article.user.username }}</a></span>
+                                <span style="margin-left: 5px">{{ moment(article.timestamp).format('l') }}</span>
+                                <span class="text-secondary text-right" style="margin-left: 5px"><i class="fa fa-eye"></i> {{ article.clicks }}</span>
+                                <span class="text-secondary text-right" style="margin-left: 5px"><i class="fa fa-commenting-o"></i> {{ article.comments|length }}</span>
+                                <p>
+                                    <a id="truncate2" class="text-secondary" href="{{ url_for('article.article_show', article_id=article.id) }}">
+                                        {{ article.body|striptags }}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- 右侧侧栏 -->
+            <div class="col-xl-4 d-none d-xl-block" style="padding-right: 0">
+                {% for sidebar in sidebars %}
+                    {% if not sidebar.forbid %}
+                    <div class="card" style="margin-bottom:15px">
+                        <div class="card-header" style="border-color: #D1603D">
+                            {{ sidebar.title }}
+                        </div>
+                        <div class="card-body">
+                            {{ sidebar.body|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+        </div>
+        <!-- 分页 -->
+        <div style="margin-top: 15px">
+            <div class="">
+                <ul class="pagination justify-content-center">
+                    {% if pagination.has_prev %}
+                        <li class="page-item "><a class="page-link" href="{{ url_for('main.index', page=pagination.prev_num) }}">上一页</a></li>
+                    {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#">上一页</a></li>
+                    {% endif %}
+
+                    {% for page_num in pagination.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+                        {% if page_num %}
+                            {% if pagination.page == page_num %}
+                            <li class="page-item active"><a class="page-link" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('main.index', page=page_num) }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="">......</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if pagination.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('main.index', page=pagination.next_num) }}">下一页</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">下一页</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

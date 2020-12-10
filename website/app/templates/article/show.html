@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block script %}
+<style>
+#article_body img{
+    max-width:100%;
+    max-height:auto;
+}
+</style>
+{% endblock%}
+
+{% block contents %}
+<div class="container" style="padding-top: 15px; padding-bottom: 15px; background-color:#fff">
+    <div style="padding-top:15px; padding-bottom:15px">
+        <h1>{{ article.title|title  }}</h1>
+    </div>
+    <div>
+        <span class="badge badge-secondary">{{ article.original }}</span>
+        <span class="text-secondary" style="margin-left: 10px">{{ article.classes }}</span>
+        <a class="text-decoration-none text-secondary" href="{{ url_for('user.home', user_id=article.user.id) }}" style="margin-left: 10px">{{ article.user.username }}</a>
+        <span class="text-secondary" style="margin-left: 10px">浏览量{{ article.clicks }}</span>
+        <span class="text-secondary" style="margin-left: 10px">最后更新于{{ moment(article.updatetimestamp).format('L') }}</span>
+        {% if article.user == current_user%}
+        <span class="text-secondary" style="margin-left: 10px">发布于{{ moment(article.timestamp).format('LL') }}</span>
+
+        <a class="text-decoration-none text-success" style="margin-left: 10px" href="{{ url_for('article.edit', article_id=article.id) }}">编辑</a>
+
+        <a class="text-decoration-none text-danger" data-toggle="modal" data-target="#DELETE" style="margin-left: 10px">删除</a>
+
+        <!-- 删除确认框 -->
+        <div class="modal fade" id="DELETE">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                <!-- 确认框头部 -->
+                    <div class="modal-header">
+                        <p class="modal-title">确认要删除文章么？</p>
+                        <button class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                <!-- 确认框主体 -->
+                <div class="modal-body text-center">
+                    删除后，文章不可恢复.
+                </div>
+
+                <!-- 确认框底部 -->
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <a class="btn btn-danger float-left" href="{{ url_for('article.delete', article_id=article.id) }}">删除</a>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if current_user.is_authenticated and current_user.level>=2 %}
+            {% if article.reviewed %}
+                <a class="text-success" style="margin-left: 10px" href="{{ url_for('backstage.reviewed_article', article_id=article.id ) }}">
+                    已审核
+                </a>
+            {% else %}
+                <a class="text-danger" style="margin-left: 10px" href="{{ url_for('backstage.reviewed_article', article_id=article.id ) }}">
+                    未审核
+                </a>
+            {% endif %}
+        {% endif %}
+        {% if current_user.is_authenticated and current_user.level>=3 %}
+            {% if article.forbid %}
+                <a class="text-danger" style="margin-left: 10px" href="{{ url_for('backstage.forbid_article', article_id=article.id ) }}">
+                    禁用
+                </a>
+            {% else %}
+                <a class="text-success" style="margin-left: 10px" href="{{ url_for('backstage.forbid_article', article_id=article.id ) }}">
+                    启用
+                </a>
+            {% endif %}
+        {% endif %}
+
+    </div>
+    <hr style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+    <div id="article_body">
+        {{ article.body|safe  }}
+    </div>
+</div>
+
+<!--评论部分-->
+<div class="container" style="margin-top: 15px; padding-bottom: 15px; background-color: #fff">
+    {{ wtf.quick_form(form, button_map={'submit':'secondary'})}}
+</div>
+
+<!--评论展示部分-->
+{% if comments|length > 0 %}
+<div class="container" style="margin-top: 15px; padding-bottom: 15px; background-color: #fff">
+    {% for comment in comments %}
+    <div class="list-group">
+        <div class="list-group-item border-0" style="padding-left: 0">
+            <a class="text-decoration-none text-dark" href="#" style="margin-right: 15px">{{ comment.user.username }}</a>
+            <span class="text-secondary" style="margin-right: 15px">{{ moment(comment.timestamp).fromNow(refresh=True) }}</span>
+            <span class="text-dark">{{ comment.body }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

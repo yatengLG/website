@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python中文网-开放自主 平等互助</title>
+    <link rel="icon" href="{{ url_for('static', filename='imgs/图标128.png')}}" type="image/x-icon"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+
+    <script src="{{ url_for('static', filename='js/prism.js')}}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css')}}">
+
+</head>
+<body style="background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(16, 141, 199), rgb(239, 142, 56)) repeat scroll 0% 0%;">
+    <div class="container" id="main-screen">
+        <div class="row" style="margin-top: 50px; margin-bottom: 50px">
+            <div class="col-sm-8" style="background-color:rgb(199,210,212,0.2)">
+                <div class="btn-group">
+                    <button type="button" class="btn ">当前播放</button>
+                    <button type="button" class="btn ">推荐歌单</button>
+                    <button type="button" class="btn ">歌曲搜索</button>
+                </div>
+                <div class="pre-scrollable" id="music-list" style=" min-height: 60%">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>歌曲</th>
+                                <th>歌手</th>
+                                <th>专辑</th>
+                                <th>平台</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Pitt</td>
+                                <td>New York</td>
+                                <td>USA</td>
+                                <td>Female</td>
+                            </tr><tr>
+                                <td>1</td>
+                                <td>Pitt</td>
+                                <td>New York</td>
+                                <td>USA</td>
+                                <td>Female</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-4" style="background-color: rgb(199,210,212,0.2)">
+                aaa
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onresize = () =>
+        {
+            document.getElementById("main-screen").style.height = window.innerHeight + "px";
+            document.getElementById("main-screen").style.width = window.innerWidth + "px";
+            document.getElementById("main-screen").style.marginTop = 50+"px";
+            document.getElementById("main-screen").style.marginBottom = 50+"px";
+
+            document.getElementById("p1").innerHTML = window.innerHeight;
+        }
+        window.onload = () => {
+            document.getElementById("main-screen").style.height = window.innerHeight + "px";
+            document.getElementById("main-screen").style.width = window.innerWidth + "px";
+         }
+
+    </script>
+
+</body>
+</html>

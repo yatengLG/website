@@ -1,0 +1,10 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "backstage/base.html" %}
+
+{% block contents %}
+<div class="container" style="padding-top: 15px; padding-bottom: 100px">
+    <form  method="post" action="">
+        {{ wtf.quick_form(form, button_map={'submit':'secondary'})}}
+    </form>
+</div>
+{% endblock %}

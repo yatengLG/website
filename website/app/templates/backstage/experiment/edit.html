@@ -1,0 +1,16 @@
+{% extends "backstage/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block script %}
+
+<script src="{{ url_for('static', filename='tinymce/js/tinymce/tinymce.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tinymce_full_featured.css' )}}">
+<script src="{{ url_for('static', filename='js/tinymce_setup.js') }}"></script>
+
+{% endblock %}
+
+{% block contents %}
+<div class="container" style="padding-top: 15px; padding-bottom: 100px">
+    {{ wtf.quick_form(form, button_map={'submit':'secondary'})}}
+</div>
+{% endblock %}

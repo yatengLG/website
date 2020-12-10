@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block contents %}
+<div class="container" style="padding-top: 15px; padding-bottom: 15px; min-height: 550px">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="container">
+                <div style="padding-top:30px; padding-bottom:30px">
+                    <h2>欢迎登录python交流网</h2>
+                </div>
+                <form  method="post" action="">
+                    {{ wtf.quick_form(form, button_map={'submit':'secondary'})}}
+<!--                    {{ wtf.form_field(form.email) }}-->
+<!--                    {{ wtf.form_field(form.password) }}-->
+<!--                    {{ wtf.form_field(form.remember_me) }}-->
+<!--                    {{ wtf.form_field(form.submit, button_map={'submit':'secondary'}) }}-->
+                    <a class="text-danger float-right" href="{{ url_for('user.forget_password') }}"><strong>忘记密码</strong></a>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6 d-sm-none d-md-block">
+            <div class="container">
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

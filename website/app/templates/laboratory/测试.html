@@ -1,0 +1,37 @@
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>onresize</title>
+    </head>
+    <body>
+        <div>
+            我是页面的内容
+        </div>
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            window.onload = function(){
+                console.log('页面加载完毕')
+                watchChangeSize();
+
+            }
+            window.onresize=function(){
+                console.log('监听变化')
+                watchChangeSize();
+            }
+
+            function watchChangeSize (){
+                //可视区的宽/高(DOM)
+                //offsetHeight（带边框）和clientHeight（不带边框）区别参考上一篇文章
+                var offsetWid = document.documentElement.clientWidth;
+                var offsetHei = document.documentElement.clientHeight;
+                console.log(offsetWid);
+                console.log(offsetHei);
+            }
+        </script>
+    </body>
+    </html>
